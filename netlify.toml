@@ -1,0 +1,33 @@
+[build]
+  base = "frontend"
+  publish = "build"
+  command = "npm run build"
+
+[build.environment]
+  NODE_VERSION = "22"
+  GENERATE_SOURCEMAP = "false"
+
+[[redirects]]
+  from = "/api/*"
+  to = "https://chillconnect-backend-production-f096.up.railway.app/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[build.processing]
+  skip_processing = false
+
+[build.processing.css]
+  bundle = true
+  minify = true
+
+[build.processing.js]
+  bundle = true
+  minify = true
+
+[build.processing.html]
+  pretty_urls = true

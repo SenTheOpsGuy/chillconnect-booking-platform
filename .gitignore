@@ -125,3 +125,6 @@ test_*.db
 # Backup files
 *.bak
 *.backup
+# Local Netlify folder
+.netlify
+frontend/.env.production

@@ -26,6 +26,11 @@ app = FastAPI(
     version="1.0.0"
 )
 
+# Health check endpoint for Railway
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy", "service": "ChillConnect API"}
+
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
