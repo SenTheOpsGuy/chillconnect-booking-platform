@@ -12,6 +12,7 @@ from app.services.sms import send_booking_reminder_sms
 from app.core.config import settings
 from app.services.pricing import PricingService
 from app.services.otp import OTPService
+from app.services.websocket import notify_booking_update
 from pydantic import BaseModel
 
 router = APIRouter()
@@ -176,6 +177,20 @@ async def create_booking(
         await send_booking_confirmation_email(provider.email, booking_details)
     except Exception as e:
         print(f"Failed to send confirmation emails: {e}")
+    
+    # Send WebSocket notifications
+    try:
+        booking_data = {
+            "booking_id": booking.id,
+            "status": booking.status.value,
+            "action": "booking_created",
+            "start_time": booking.start_time.isoformat(),
+            "duration_hours": booking.duration_hours,
+            "total_tokens": booking.total_tokens
+        }
+        await notify_booking_update(current_user.id, request.provider_id, booking_data)
+    except Exception as e:
+        print(f"Failed to send WebSocket notifications: {e}")
     
     return BookingResponse(
         id=booking.id,

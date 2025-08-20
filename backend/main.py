@@ -15,6 +15,8 @@ from app.api.admin import router as admin_router
 from app.api.support import router as support_router
 from app.api.ratings import router as ratings_router
 from app.api.platform_fees import router as platform_fees_router
+from app.api.uploads import router as uploads_router
+from app.api.websocket import router as websocket_router
 
 load_dotenv()
 
@@ -46,6 +48,8 @@ app.include_router(admin_router, prefix="/api/v1/admin", tags=["Admin"])
 app.include_router(support_router, prefix="/api/v1/support", tags=["Support"])
 app.include_router(ratings_router, prefix="/api/v1/ratings", tags=["Ratings"])
 app.include_router(platform_fees_router, prefix="/api/v1/platform-fees", tags=["Platform Fees"])
+app.include_router(uploads_router, prefix="/api/v1/uploads", tags=["File Uploads"])
+app.include_router(websocket_router, prefix="/api/v1", tags=["WebSocket"])
 
 @app.get("/")
 async def root():

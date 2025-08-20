@@ -1,6 +1,8 @@
 import React, { ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import useWebSocket from '../hooks/useWebSocket';
+import NotificationsPanel from './common/NotificationsPanel';
 import { 
   HomeIcon, 
   UserGroupIcon, 
@@ -20,6 +22,17 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { user, logout, isAuthenticated, isAdmin } = useAuth();
   const navigate = useNavigate();
+  
+  // WebSocket connection for real-time notifications
+  const { 
+    isConnected: wsConnected, 
+    notifications, 
+    unreadCount, 
+    clearNotifications, 
+    markAsRead 
+  } = useWebSocket({
+    autoConnect: isAuthenticated
+  });
 
   const handleLogout = () => {
     logout();
@@ -107,6 +120,20 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <div className="flex items-center space-x-4">
               {isAuthenticated ? (
                 <div className="flex items-center space-x-4">
+                  {/* WebSocket Connection Status (dev indicator) */}
+                  {process.env.NODE_ENV === 'development' && (
+                    <div className={`w-2 h-2 rounded-full ${wsConnected ? 'bg-green-400' : 'bg-red-400'}`} 
+                         title={wsConnected ? 'Connected to live updates' : 'Disconnected from live updates'} />
+                  )}
+                  
+                  {/* Notifications */}
+                  <NotificationsPanel
+                    notifications={notifications}
+                    unreadCount={unreadCount}
+                    onMarkAsRead={markAsRead}
+                    onClearAll={clearNotifications}
+                  />
+                  
                   <span className="text-gray-300 text-sm">
                     Welcome, {user?.email}
                   </span>

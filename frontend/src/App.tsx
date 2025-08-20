@@ -15,6 +15,7 @@ import Booking from './pages/Booking';
 import Chat from './pages/Chat';
 import Support from './pages/Support';
 import TokenWallet from './pages/TokenWallet';
+import Settings from './pages/Settings';
 import Admin from './pages/Admin';
 import AdminDashboard from './pages/admin/AdminDashboard';
 
@@ -85,6 +86,12 @@ function App() {
               <Route path="/wallet" element={
                 <ProtectedRoute>
                   <Layout><TokenWallet /></Layout>
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/settings" element={
+                <ProtectedRoute>
+                  <Layout><Settings /></Layout>
                 </ProtectedRoute>
               } />
               
